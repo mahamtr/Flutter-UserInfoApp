@@ -1,7 +1,6 @@
 class Player {
   String name;
-  int level;
+  String title;
 
-  Player({this.name,this.level});
-
+  Player({this.name, this.title});
 }

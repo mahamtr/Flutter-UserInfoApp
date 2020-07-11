@@ -1,36 +1,44 @@
+import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
-import 'player.dart';
+
 import 'PlayerCard.dart';
+import 'player.dart';
 
 Color mainColor = Color(0xff1c2630);
 Color secColor = Color(0xff0aa89e);
 int loginAttempts = 0;
 
-void main() => runApp(MaterialApp(home: NinjaId()));
+void main() => runApp(MaterialApp(home: UserList()));
 
-class NinjaId extends StatefulWidget {
+class UserList extends StatefulWidget {
   @override
-  _NinjaIdState createState() => _NinjaIdState();
+  _UserListState createState() => _UserListState();
 }
 
-class _NinjaIdState extends State<NinjaId> {
-  int ninjaLevel = 0;
+class _UserListState extends State<UserList> {
+  var faker = new Faker();
+
   List<Player> players = [
-    Player(name: 'Maai', level: 16),
-    Player(name: 'Megan', level: 32),
-    Player(name: 'Roger', level: 10),
+    Player(name: 'Roger', title: "Doctor"),
+    Player(name: 'Megan', title: "Cyclist"),
   ];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
   }
 
   void delete(player) {
     setState(() {
       players.remove(player);
+    });
+  }
+
+  void addPlayer() {
+    setState(() {
+      players.add(
+          Player(name: faker.person.name(), title: faker.address.country()));
     });
   }
 
@@ -40,28 +48,30 @@ class _NinjaIdState extends State<NinjaId> {
       backgroundColor: Colors.blueGrey[900],
       appBar: AppBar(
         title: Text(
-          'Ninjas List',
-          style: TextStyle(fontFamily: 'Manrope'),
+          'User List',
+          style: TextStyle(fontFamily: 'Manrope', fontSize: 25),
         ),
         centerTitle: true,
         backgroundColor: Colors.blueGrey[800],
         elevation: 90.0,
       ),
-      body: Column(
-        children: players
-            .map((player) => PlayerCard(
-                  player: player,
-                  delete: () {
-                  this.delete(player);
-                  },
-                ))
-            .toList(),
+      body: SingleChildScrollView(
+        child: Column(
+          children: players
+              .map((player) => PlayerCard(
+                    player: player,
+                    delete: () {
+                      this.delete(player);
+                    },
+                  ))
+              .toList(),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.deepOrange[500],
         child: Icon(Icons.add),
-        onPressed: (){
-          players.add(Player(name: 'asdf',level: 24));
+        onPressed: () {
+          this.addPlayer();
         },
       ),
     );
